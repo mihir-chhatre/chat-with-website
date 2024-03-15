@@ -57,6 +57,7 @@ def get_conversational_rag_chain(retriever_chain):
       ("user", "{input}"),
     ])
     
+    # create_stuff_documents_chain: Create a chain for passing a list of Documents to a model
     stuff_documents_chain = create_stuff_documents_chain(llm,prompt)
     
     return create_retrieval_chain(retriever_chain, stuff_documents_chain)
@@ -64,12 +65,10 @@ def get_conversational_rag_chain(retriever_chain):
 def get_response(user_input):
     retriever_chain = get_context_retriever_chain(st.session_state.vector_store)
     conversation_rag_chain = get_conversational_rag_chain(retriever_chain)
-    
     response = conversation_rag_chain.invoke({
         "chat_history": st.session_state.chat_history,
         "input": user_input
     })
-    
     return response['answer']
 
 # app config
